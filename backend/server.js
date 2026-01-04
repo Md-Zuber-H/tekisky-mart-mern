@@ -6,6 +6,8 @@ import authRoute from "./src/routes/authRoute.js";
 import userRoute from "./src/routes/userRoute.js";
 import adminRoutes from "./src/routes/adminRoute.js";
 import productRoutes from "./src/routes/productRoute.js";
+import uploadRoutes from "./src/routes/uploadRoute.js";
+import categoryRoutes from "./src/routes/categoryRoute.js";
 
 
 
@@ -26,6 +28,8 @@ app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/categories", categoryRoutes);
 
 
 
