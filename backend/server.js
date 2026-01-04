@@ -5,6 +5,8 @@ import connectDB from "./src/config/db.js";
 import authRoute from "./src/routes/authRoute.js";
 import userRoute from "./src/routes/userRoute.js";
 import adminRoutes from "./src/routes/adminRoute.js";
+import productRoutes from "./src/routes/productRoute.js";
+
 
 
 
@@ -23,6 +25,8 @@ app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/admin", adminRoutes);
+app.use("/api/products", productRoutes);
+
 
 
 
