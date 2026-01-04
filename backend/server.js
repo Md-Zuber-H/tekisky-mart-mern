@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./src/config/db.js";
 import authRoute from "./src/routes/authRoute.js";
+import userRoute from "./src/routes/userRoute.js";
+
 
 
 
@@ -17,6 +19,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
+
 
 
 // test route
