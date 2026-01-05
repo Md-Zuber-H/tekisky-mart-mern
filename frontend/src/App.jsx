@@ -1,23 +1,21 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/layout/Navbar";
+import { Routes, Route } from "react-router-dom";
+import Layout from "./components/layout/Layout";
 
-import Home from "./pages/Home";
-import Cart from "./pages/Cart";
-import Login from "./pages/Login";
-import Orders from "./pages/Orders";
+const Home = () => <h1 className="text-3xl font-bold">Home</h1>;
+const Cart = () => <h1 className="text-3xl font-bold">Cart</h1>;
+const Orders = () => <h1 className="text-3xl font-bold">Orders</h1>;
+const Login = () => <h1 className="text-3xl font-bold">Login</h1>;
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-
+    <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
-    </BrowserRouter>
+    </Layout>
   );
 }
 
