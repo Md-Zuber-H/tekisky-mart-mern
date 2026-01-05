@@ -114,3 +114,28 @@ export const markOrderAsDelivered = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// GET SINGLE ORDER (USER / ADMIN)
+export const getOrderById = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate("user", "name email")
+      .populate("orderItems.product", "name price image");
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // user apna order hi dekh sakta
+    if (
+      order.user._id.toString() !== req.user._id.toString() &&
+      req.user.role !== "admin"
+    ) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    res.status(200).json(order);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
