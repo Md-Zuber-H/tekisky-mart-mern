@@ -8,9 +8,8 @@ import adminRoutes from "./src/routes/adminRoute.js";
 import productRoutes from "./src/routes/productRoute.js";
 import uploadRoutes from "./src/routes/uploadRoute.js";
 import categoryRoutes from "./src/routes/categoryRoute.js";
-import cartRoutes from "./src/routes/cartRoutes.js";
-
-
+import cartRoutes from "./src/routes/cartRoute.js";
+import orderRoutes from "./src/routes/orderRoute.js";
 
 
 
@@ -32,6 +31,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 
 
