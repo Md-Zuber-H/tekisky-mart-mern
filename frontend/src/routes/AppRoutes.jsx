@@ -6,7 +6,7 @@ import Cart from "../pages/Cart";
 import Orders from "../pages/Orders";
 import Checkout from "../pages/Checkout";
 import AdminOrders from "../pages/admin/Orders";
-
+import PrivateRoute from "./PrivateRoute";
 const AppRoutes = () => {
     return (
         <Routes>
@@ -21,6 +21,14 @@ const AppRoutes = () => {
                     <AdminRoute>
                         <AdminOrders />
                     </AdminRoute>
+                }
+            />
+            <Route
+                path="/orders"
+                element={
+                    <PrivateRoute>
+                        <Orders />
+                    </PrivateRoute>
                 }
             />
         </Routes>
