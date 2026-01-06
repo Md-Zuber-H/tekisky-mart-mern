@@ -1,8 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
-  // abhi dummy (auth baad me connect karenge)
-  const isLoggedIn = false;
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  const logoutHandler = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <nav className="sticky top-0 z-50 backdrop-blur bg-slate-900/80 border-b border-slate-800">
@@ -18,38 +24,27 @@ const Navbar = () => {
 
         {/* LINKS */}
         <div className="flex items-center gap-6 text-sm font-medium">
-          <Link className="hover:text-indigo-400 transition" to="/">
-            Home
-          </Link>
+          <Link to="/" className="hover:text-indigo-400 transition">Home</Link>
+          <Link to="/cart" className="hover:text-indigo-400 transition">Cart</Link>
+          <Link to="/orders" className="hover:text-indigo-400 transition">Orders</Link>
 
-          <Link className="hover:text-indigo-400 transition" to="/cart">
-            Cart
-          </Link>
-
-          <Link className="hover:text-indigo-400 transition" to="/orders">
-            Orders
-          </Link>
-
-          {!isLoggedIn ? (
+          {!user ? (
             <Link
               to="/login"
-              className="
-                px-4 py-1.5 rounded-md
-                bg-gradient-to-r from-indigo-500 to-purple-500
-                hover:opacity-90 transition
-              "
+              className="px-4 py-1.5 rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 transition"
             >
               Login
             </Link>
           ) : (
-            <button
-              className="
-                px-4 py-1.5 rounded-md
-                bg-red-500 hover:bg-red-600 transition
-              "
-            >
-              Logout
-            </button>
+            <>
+              <span className="text-gray-300">{user.name}</span>
+              <button
+                onClick={logoutHandler}
+                className="px-4 py-1.5 rounded-md bg-red-500 hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </>
           )}
         </div>
       </div>
