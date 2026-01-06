@@ -4,9 +4,8 @@ const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:shadow-lg hover:shadow-indigo-500/10 transition">
+    <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:shadow-lg transition">
 
-      {/* IMAGE */}
       <div className="h-48 bg-slate-800 flex items-center justify-center">
         <img
           src={product.image}
@@ -15,7 +14,6 @@ const ProductCard = ({ product }) => {
         />
       </div>
 
-      {/* CONTENT */}
       <div className="p-4 space-y-2">
         <h3 className="font-semibold text-gray-100 truncate">
           {product.name}
@@ -31,8 +29,8 @@ const ProductCard = ({ product }) => {
           </span>
 
           <button
-            onClick={() => addToCart(product, 1)}
-            className="px-3 py-1.5 text-sm rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 transition"
+            onClick={() => addToCart(product._id, 1)}
+            className="px-3 py-1.5 text-sm rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90"
           >
             Add to Cart
           </button>
