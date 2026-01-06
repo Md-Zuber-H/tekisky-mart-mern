@@ -1,9 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { totalQty } = useCart();
 
   const logoutHandler = () => {
     logout();
@@ -23,10 +25,24 @@ const Navbar = () => {
         </Link>
 
         {/* LINKS */}
-        <div className="flex items-center gap-6 text-sm font-medium">
-          <Link to="/" className="hover:text-indigo-400 transition">Home</Link>
-          <Link to="/cart" className="hover:text-indigo-400 transition">Cart</Link>
-          <Link to="/orders" className="hover:text-indigo-400 transition">Orders</Link>
+        <div className="flex items-center gap-6 text-sm font-medium text-gray-200">
+
+          <Link to="/" className="hover:text-indigo-400 transition">
+            Home
+          </Link>
+
+          <Link to="/cart" className="relative hover:text-indigo-400 transition">
+            Cart
+            {totalQty > 0 && (
+              <span className="absolute -top-2 -right-3 text-xs px-1.5 rounded-full bg-indigo-500 text-white">
+                {totalQty}
+              </span>
+            )}
+          </Link>
+
+          <Link to="/orders" className="hover:text-indigo-400 transition">
+            Orders
+          </Link>
 
           {!user ? (
             <Link
@@ -36,7 +52,7 @@ const Navbar = () => {
               Login
             </Link>
           ) : (
-            <>
+            <div className="flex items-center gap-4">
               <span className="text-gray-300">{user.name}</span>
               <button
                 onClick={logoutHandler}
@@ -44,7 +60,7 @@ const Navbar = () => {
               >
                 Logout
               </button>
-            </>
+            </div>
           )}
         </div>
       </div>
