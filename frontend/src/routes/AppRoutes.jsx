@@ -8,6 +8,7 @@ import Checkout from "../pages/Checkout";
 import AdminOrders from "../pages/admin/Orders";
 import PrivateRoute from "./PrivateRoute";
 import Checkout from "../pages/Checkout";
+import AdminRoute from "./AdminRoute";
 const AppRoutes = () => {
     return (
         <Routes>
