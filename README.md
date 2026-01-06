@@ -23,6 +23,13 @@ Full-stack e-commerce application built using MERN stack.
 - User
 - Admin
 
+## Author
+
+**Md Zuber Husain**
+
+- Full Stack MERN Developer  
+- GitHub: https://github.com/Md-Zuber-H
+
 ## Installation
 
 ```bash
