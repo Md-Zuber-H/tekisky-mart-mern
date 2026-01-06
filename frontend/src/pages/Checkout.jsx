@@ -1,66 +1,99 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
-import axios from "../api/axios";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cartItems, clearCart, totalPrice } = useCart();
-  const { user } = useAuth();
+  const { cart, loading } = useCart();
+  const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [placing, setPlacing] = useState(false);
+
+  if (loading) return <p className="text-center py-10">Loading...</p>;
+  if (!cart || cart.items.length === 0)
+    return <p className="text-center py-10">Cart is empty</p>;
 
   const placeOrderHandler = async () => {
     try {
-      const { data } = await axios.post(
-        "/orders",
-        {
-          items: cartItems.map(item => ({
-            product: item._id,
-            quantity: item.qty,
-          })),
-          totalAmount: totalPrice,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+      setPlacing(true);
 
-      clearCart();
+      const { data } = await api.post("/orders", {
+        items: cart.items.map((item) => ({
+          product: item.product._id,
+          quantity: item.quantity,
+        })),
+        paymentMethod,
+      });
+
       navigate(`/orders/${data._id}`);
     } catch (error) {
       alert(error.response?.data?.message || "Order failed");
+    } finally {
+      setPlacing(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10 text-gray-200">
-      <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+    <div className="max-w-4xl mx-auto p-6 text-white space-y-6">
+      <h1 className="text-2xl font-bold">Checkout</h1>
 
-      <div className="space-y-4">
-        {cartItems.map(item => (
+      {/* ITEMS */}
+      <div className="space-y-3">
+        {cart.items.map((item) => (
           <div
-            key={item._id}
-            className="flex justify-between bg-slate-900 border border-slate-800 p-4 rounded-lg"
+            key={item.product._id}
+            className="flex justify-between bg-slate-900 p-3 rounded"
           >
-            <span>{item.name} × {item.qty}</span>
+            <span>
+              {item.product.name} × {item.quantity}
+            </span>
             <span className="text-indigo-400">
-              ₹{item.price * item.qty}
+              ₹{item.product.price * item.quantity}
             </span>
           </div>
         ))}
       </div>
 
-      <div className="mt-6 flex justify-between items-center">
-        <h2 className="text-xl font-semibold">
-          Total: <span className="text-indigo-400">₹{totalPrice}</span>
+      {/* PAYMENT METHOD */}
+      <div className="space-y-2">
+        <h2 className="text-lg font-semibold">Payment Method</h2>
+
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            value="COD"
+            checked={paymentMethod === "COD"}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+          />
+          Cash on Delivery
+        </label>
+
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            value="ONLINE"
+            checked={paymentMethod === "ONLINE"}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+          />
+          Online (Fake)
+        </label>
+      </div>
+
+      {/* TOTAL + BUTTON */}
+      <div className="flex justify-between items-center border-t border-slate-800 pt-4">
+        <h2 className="text-xl font-bold">
+          Total:{" "}
+          <span className="text-indigo-400">
+            ₹{cart.totalPrice}
+          </span>
         </h2>
 
         <button
           onClick={placeOrderHandler}
-          className="px-6 py-2 rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90"
+          disabled={placing}
+          className="px-6 py-2 rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 disabled:opacity-50"
         >
-          Place Order
+          {placing ? "Placing..." : "Place Order"}
         </button>
       </div>
     </div>
