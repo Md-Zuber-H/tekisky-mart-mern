@@ -1,40 +1,63 @@
 import { useEffect, useState } from "react";
 import { getAllProducts } from "../api/productApi";
+import { getCategories } from "../api/categoryApi";
+
 import Loader from "../components/common/Loader";
 import ProductList from "../components/product/ProductList";
 import VoiceSearch from "../components/common/VoiceSearch";
 
-
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getAllProducts();
-        setProducts(data);
-        setFilteredProducts(data);
+        const [productsData, categoriesData] = await Promise.all([
+          getAllProducts(),
+          getCategories(),
+        ]);
+
+        setProducts(productsData);
+        setFilteredProducts(productsData);
+        setCategories(categoriesData);
       } catch (err) {
-        setError("Failed to load products");
+        setError("Failed to load data");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchData();
   }, []);
 
-  // 🔍 search filter (text + voice)
+  /* FILTER LOGIC */
   useEffect(() => {
-    const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(keyword.toLowerCase())
-    );
+    let filtered = [...products];
+
+    // category filter
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(
+        (p) => p.category?.name === selectedCategory
+      );
+    }
+
+    // text / voice search
+    if (keyword) {
+      filtered = filtered.filter((p) =>
+        p.name.toLowerCase().includes(keyword.toLowerCase())
+      );
+    }
+
     setFilteredProducts(filtered);
-  }, [keyword, products]);
+  }, [keyword, selectedCategory, products]);
 
   if (loading) return <Loader />;
 
@@ -46,25 +69,51 @@ const Home = () => {
     );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col gap-4">
         <h1 className="text-2xl font-bold">
           Latest Products
         </h1>
 
-        {/* SEARCH BAR + VOICE */}
-        <div className="flex gap-2 w-full sm:w-[400px]">
+        {/* SEARCH */}
+        <div className="flex gap-2 max-w-md">
           <input
-            type="text"
-            placeholder="Search products..."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            className="flex-1 bg-slate-800 text-white px-4 py-2 rounded-md outline-none"
+            placeholder="Search products..."
+            className="flex-1 bg-slate-800 px-4 py-2 rounded"
           />
-
           <VoiceSearch onResult={setKeyword} />
         </div>
+      </div>
+
+      {/* CATEGORY FILTER */}
+      <div className="flex gap-3 flex-wrap">
+        <button
+          onClick={() => setSelectedCategory("all")}
+          className={`px-4 py-1.5 rounded-full text-sm ${
+            selectedCategory === "all"
+              ? "bg-indigo-600 text-white"
+              : "bg-slate-800 text-gray-300"
+          }`}
+        >
+          All
+        </button>
+
+        {categories.map((cat) => (
+          <button
+            key={cat._id}
+            onClick={() => setSelectedCategory(cat.name)}
+            className={`px-4 py-1.5 rounded-full text-sm ${
+              selectedCategory === cat.name
+                ? "bg-indigo-600 text-white"
+                : "bg-slate-800 text-gray-300"
+            }`}
+          >
+            {cat.name}
+          </button>
+        ))}
       </div>
 
       {/* PRODUCTS */}
