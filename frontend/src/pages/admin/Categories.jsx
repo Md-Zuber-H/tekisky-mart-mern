@@ -68,6 +68,32 @@ const AdminCategories = () => {
             >
               Delete
             </button>
+            {/* PRICE FILTER */}
+            <div className="bg-slate-900 p-4 rounded max-w-md">
+              <p className="text-sm text-gray-400 mb-2">
+                Price Range
+              </p>
+
+              <div className="flex items-center gap-4">
+                <input
+                  type="number"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(Number(e.target.value))}
+                  className="w-24 bg-slate-800 p-2 rounded"
+                  placeholder="Min"
+                />
+
+                <span className="text-gray-400">—</span>
+
+                <input
+                  type="number"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(Number(e.target.value))}
+                  className="w-24 bg-slate-800 p-2 rounded"
+                  placeholder="Max"
+                />
+              </div>
+            </div>
           </div>
         ))}
       </div>

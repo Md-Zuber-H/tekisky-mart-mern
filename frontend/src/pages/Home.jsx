@@ -17,6 +17,9 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(100000);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,22 +45,33 @@ const Home = () => {
   useEffect(() => {
     let filtered = [...products];
 
-    // category filter
+    // 1️⃣ CATEGORY FILTER
     if (selectedCategory !== "all") {
       filtered = filtered.filter(
         (p) => p.category?.name === selectedCategory
       );
     }
 
-    // text / voice search
-    if (keyword) {
+    // 2️⃣ SEARCH / VOICE FILTER
+    if (keyword.trim() !== "") {
       filtered = filtered.filter((p) =>
         p.name.toLowerCase().includes(keyword.toLowerCase())
       );
     }
 
+    // 3️⃣ PRICE FILTER
+    filtered = filtered.filter(
+      (p) => p.price >= minPrice && p.price <= maxPrice
+    );
+
     setFilteredProducts(filtered);
-  }, [keyword, selectedCategory, products]);
+  }, [
+    products,
+    selectedCategory,
+    keyword,
+    minPrice,
+    maxPrice,
+  ]);
 
   if (loading) return <Loader />;
 
@@ -92,11 +106,10 @@ const Home = () => {
       <div className="flex gap-3 flex-wrap">
         <button
           onClick={() => setSelectedCategory("all")}
-          className={`px-4 py-1.5 rounded-full text-sm ${
-            selectedCategory === "all"
+          className={`px-4 py-1.5 rounded-full text-sm ${selectedCategory === "all"
               ? "bg-indigo-600 text-white"
               : "bg-slate-800 text-gray-300"
-          }`}
+            }`}
         >
           All
         </button>
@@ -105,11 +118,10 @@ const Home = () => {
           <button
             key={cat._id}
             onClick={() => setSelectedCategory(cat.name)}
-            className={`px-4 py-1.5 rounded-full text-sm ${
-              selectedCategory === cat.name
+            className={`px-4 py-1.5 rounded-full text-sm ${selectedCategory === cat.name
                 ? "bg-indigo-600 text-white"
                 : "bg-slate-800 text-gray-300"
-            }`}
+              }`}
           >
             {cat.name}
           </button>
