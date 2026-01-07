@@ -1,20 +1,31 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
+const linkClass = ({ isActive }) =>
+  `block px-3 py-2 rounded transition ${
+    isActive
+      ? "bg-indigo-600 text-white"
+      : "hover:text-indigo-400 text-gray-300"
+  }`;
 
 const AdminSidebar = () => {
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 p-4 text-gray-300">
-      <nav className="space-y-3">
-        <Link to="/admin/dashboard" className="block hover:text-indigo-400">
+    <aside className="w-64 bg-slate-900 border-r border-slate-800 p-4">
+      <h2 className="text-xl font-bold text-indigo-400 mb-6">
+        Admin Panel
+      </h2>
+
+      <nav className="space-y-2">
+        <NavLink to="/admin/dashboard" className={linkClass}>
           Dashboard
-        </Link>
+        </NavLink>
 
-        <Link to="/admin/products" className="block hover:text-indigo-400">
+        <NavLink to="/admin/products" className={linkClass}>
           Products
-        </Link>
+        </NavLink>
 
-        <Link to="/admin/orders" className="block hover:text-indigo-400">
+        <NavLink to="/admin/orders" className={linkClass}>
           Orders
-        </Link>
+        </NavLink>
       </nav>
     </aside>
   );
