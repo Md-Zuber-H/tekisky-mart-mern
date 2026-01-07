@@ -20,3 +20,19 @@ export const createProduct = async (formData) => {
   });
   return data;
 };
+
+// UPDATE PRODUCT (ADMIN)
+export const updateProduct = async (id, formData) => {
+  const { data } = await api.put(`/products/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return data;
+};
+
+// DELETE PRODUCT (ADMIN)
+export const deleteProduct = async (id) => {
+  const { data } = await api.delete(`/products/${id}`);
+  return data;
+};
